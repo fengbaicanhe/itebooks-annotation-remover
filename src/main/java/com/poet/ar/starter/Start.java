@@ -38,10 +38,14 @@ public final class Start {
 
         // try get use new File
         File file = new File(configFile);
+        String userDir = System.getProperty("user.dir");
+        File userDirFile = new File(userDir,configFile);
         if (file.exists()) {
             // file found
             is = new FileInputStream(file);
-        } else {
+        } else if( userDirFile.exists() ){
+            is = new FileInputStream(userDirFile);
+        } else  {
             // try get from class path
             is = ClassPathResource.getClassPathResource(configFile);
         }
@@ -106,7 +110,6 @@ public final class Start {
 
         logger.debug("all process done!");
     }
-
 
     /**
      * after process,open the output root dir
