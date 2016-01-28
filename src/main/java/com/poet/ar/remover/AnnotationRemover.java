@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Meta;
 import org.apache.log4j.Logger;
 
 import com.itextpdf.text.DocumentException;
@@ -49,6 +52,8 @@ public class AnnotationRemover {
         FileOutputStream fos = new FileOutputStream(fileOut);
         PdfStamper stamper = new PdfStamper(reader, fos);
 
+        removeInfo(reader,stamper);
+
         int pageNums = reader.getNumberOfPages();
 
         int totalAnnoCount = 0;
@@ -72,6 +77,30 @@ public class AnnotationRemover {
         reader.close();
 
         logger.debug("success removed " + totalAnnoCount + " annotation(s), "+ totalContentCount +" content(s), with output file: " + fileOut);
+    }
+
+    /**
+     * remove Creator,Subject,Producer,Author,Title,Keywords
+     * @param reader
+     * @param stamper
+     */
+    private static void removeInfo(PdfReader reader, PdfStamper stamper){
+        Map<String,String> infos = reader.getInfo();
+
+        infos.put(Meta.AUTHOR, "");
+        infos.put(Meta.KEYWORDS,"");
+        infos.put(Meta.TITLE,"");
+        infos.put(Meta.SUBJECT, "");
+
+        infos.put("Creator","");
+        infos.put("Subject","");
+        infos.put("Author", "");
+        infos.put("Title", "");
+        infos.put("Keywords", "");
+
+        infos.put(Meta.PRODUCER,"  ");
+
+        stamper.setMoreInfo(infos);
     }
 
     /**
