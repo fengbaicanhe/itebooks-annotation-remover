@@ -21,6 +21,10 @@ public class AnnotationRemover {
 
     private static final List<String> keywords = KeywordsLoader.loadKeywords();
 
+    public static void doRemove(File fileIn, File fileOut) throws IOException, DocumentException {
+        doRemove(fileIn.getAbsolutePath(),fileOut.getAbsolutePath());
+    }
+
     /**
      * @param fileIn  pdf filename you want to remove annotation
      * @param fileOut removed annotation pdf save path
