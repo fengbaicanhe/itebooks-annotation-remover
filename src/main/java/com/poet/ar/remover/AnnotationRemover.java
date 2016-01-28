@@ -98,7 +98,8 @@ public class AnnotationRemover {
         infos.put("Title", "");
         infos.put("Keywords", "");
 
-        infos.put(Meta.PRODUCER,"  ");
+        // this will not work ,if you want change producer , you need buy a itext license
+        infos.put(Meta.PRODUCER,"");
 
         stamper.setMoreInfo(infos);
     }
