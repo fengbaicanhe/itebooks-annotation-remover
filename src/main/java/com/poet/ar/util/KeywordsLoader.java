@@ -43,17 +43,14 @@ public class KeywordsLoader {
     }
 
     public static List<String> loadKeywords(String configFile){
-        return loadKeywords(getClassPathResource(configFile));
+        return loadKeywords(ClassPathResource.getClassPathResource(configFile));
     }
 
     public static List<String> loadKeywords(){
         return loadKeywords(CONFIG_FILE);
     }
 
-    // ====
-    private static InputStream getClassPathResource(String path){
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-    }
+
 
 
 }
