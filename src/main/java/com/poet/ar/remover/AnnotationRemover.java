@@ -29,6 +29,8 @@ public class AnnotationRemover {
      */
     public static void doRemove(String fileIn, String fileOut) throws IOException, DocumentException {
 
+        logger.debug("starting process file: " + fileIn );
+
         PdfReader reader = new PdfReader(fileIn);
 
         FileOutputStream fos = new FileOutputStream(fileOut);
@@ -36,31 +38,42 @@ public class AnnotationRemover {
 
         int pageNums = reader.getNumberOfPages();
 
+        int totalAnnoCount = 0;
+        int totalContentCount = 0;
         for (int i = 1; i <= pageNums; i++) {
 
             PdfDictionary page = reader.getPageNRelease(i);
 
-            doRemoveAnnotation(page);
-            doRemoveContent(page);
+            int annoCount = doRemoveAnnotation(page);
+            int contentCount = doRemoveContent(page);
+
+            totalAnnoCount += annoCount;
+            totalContentCount += contentCount;
+
+            logger.debug("removed " + annoCount + " annotation(s) in page " + i + " ,in file: " + fileIn);
+            logger.debug("removed " + contentCount + " content(s) in page " + i + " ,in file: " + fileIn);
         }
 
         stamper.close();
         fos.close();
         reader.close();
+
+        logger.debug("success removed " + totalAnnoCount + " annotation(s), "+ totalContentCount +" content(s), with output file: " + fileOut);
     }
 
     /**
      * remove content that matches keywords
      *
      * @param page
+     * @return count of removed content
      */
-    private static void doRemoveContent(PdfDictionary page) {
+    private static int doRemoveContent(PdfDictionary page) {
 
         // all contents in page i
         PdfArray contentArray = page.getAsArray(PdfName.CONTENTS);
         PdfDictionary resources = page.getAsDict(PdfName.RESOURCES);
-
         List<Integer> willRemovedIx = new ArrayList<Integer>();
+
         if (contentArray != null) {
 
             PdfStream stream = null;
@@ -89,33 +102,39 @@ public class AnnotationRemover {
 
 
             }
+
+            for (Integer ix : willRemovedIx) {
+                contentArray.remove(ix);
+            }
         }
 
-        for (Integer ix : willRemovedIx) {
-            contentArray.remove(ix);
-        }
-
+        return willRemovedIx.size();
     }
 
     /**
      * remove annotation that matches keywords
      *
      * @param page
+     * @return count of removed annotations
      */
-    private static void doRemoveAnnotation(PdfDictionary page) {
+    private static int doRemoveAnnotation(PdfDictionary page) {
 
         // all annotations in page i
         PdfArray annoArray = page.getAsArray(PdfName.ANNOTS);
+        List<Integer> willRemovedIx = new ArrayList<Integer>();
 
         if (annoArray != null) {
 
-            List<Integer> willRemovedIx = new ArrayList<Integer>();
             PdfDictionary annotation = null;
             PdfDictionary a = null;
             PdfString uri = null;
             for (int i = 0; i < annoArray.size(); i++) {
 
                 annotation = annoArray.getAsDict(i);
+
+                if (annotation == null) {
+                    continue;
+                }
 
                 a = annotation.getAsDict(PdfName.A);
 
@@ -142,6 +161,7 @@ public class AnnotationRemover {
             }
         }
 
+        return willRemovedIx.size();
     }
 
 }

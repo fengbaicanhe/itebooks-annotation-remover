@@ -12,12 +12,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * Created by Love0 on 2016/1/27 0027.
+ * Created by poet on 2016/1/27 0027.
  */
 public class TestBatchProcessPdfFile {
 
-     String fileOutDir = "H:\\books-test\\out\\";
-     String fileInRootDir = "H:\\books-test";
+     String fileOutDir = "E:\\books\\out\\";
+     String fileInRootDir = "E:\\books";
      final String EXT = ".pdf";
      final String outSuffix = "-fixed.pdf";
 
@@ -68,8 +68,7 @@ public class TestBatchProcessPdfFile {
 
         executorService.shutdown();
 
-        while( !executorService.isTerminated() )
-            System.out.println("wait.....");
+        while( !executorService.isTerminated() ){}
 
     }
 
