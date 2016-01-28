@@ -146,8 +146,9 @@ public class AnnotationRemover {
 
             }
 
+            int i  = 0;
             for (Integer ix : willRemovedIx) {
-                contentArray.remove(ix);
+                contentArray.remove(ix - i++);
             }
         }
 
@@ -199,9 +200,11 @@ public class AnnotationRemover {
 
             }
 
+            int i = 0;
             for (Integer ix : willRemovedIx) {
-                annoArray.remove(ix);
+                annoArray.remove(ix - i++);
             }
+
         }
 
         return willRemovedIx.size();
