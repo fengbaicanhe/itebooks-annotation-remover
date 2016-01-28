@@ -1,16 +1,25 @@
 package com.poet.ar.remover;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.*;
-import com.poet.ar.util.KeywordsLoader;
-import com.poet.ar.util.StreamContentExtractor;
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PRStream;
+import com.itextpdf.text.pdf.PdfArray;
+import com.itextpdf.text.pdf.PdfDictionary;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfStream;
+import com.itextpdf.text.pdf.PdfString;
+import com.poet.ar.util.ConfigLoader;
+import com.poet.ar.util.StreamContentExtractor;
 
 /**
  * Created by poet on 2016/1/27 0027.
@@ -19,7 +28,7 @@ public class AnnotationRemover {
 
     private static Logger logger = Logger.getLogger(AnnotationRemover.class);
 
-    private static final List<String> keywords = KeywordsLoader.loadKeywords();
+    private static final Collection<String> keywords = ConfigLoader.getKeywords();
 
     public static void doRemove(File fileIn, File fileOut) throws IOException, DocumentException {
         doRemove(fileIn.getAbsolutePath(),fileOut.getAbsolutePath());
